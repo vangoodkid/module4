@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ExchangeMoneyController {
 
-    @GetMapping({"/", "/exchange"})
+    @GetMapping({ "/exchange"})
     public String showForm() {
         return "revert";
     }
