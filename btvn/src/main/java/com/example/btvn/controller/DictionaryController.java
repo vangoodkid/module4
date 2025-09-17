@@ -11,7 +11,7 @@ public class DictionaryController {
     private static final String[] engWords = {"hello", "book", "computer", "dog", "cat"};
     private static final String[] vieWords = {"xin chào", "quyển sách", "máy tính", "con chó", "con mèo"};
 
-    @GetMapping({"/", "/translate"})
+    @GetMapping({ "/translate"})
     public String showForm() {
         return "form";
     }
