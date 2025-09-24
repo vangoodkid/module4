@@ -19,6 +19,22 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/bai4" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/bai4" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/demostudent" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/demostudent" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>
