@@ -1,30 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <th:block th:insert="~{/layout/layout::library}"/>
+    <title>Thêm sản phẩm</title>
+    <meta charset="UTF-8"/>
 </head>
 <body>
-<div th:replace="~{/layout/layout::header}"></div>
-<h1>Thêm mới</h1>
-<form action="/students/add" method="post" th:object="${student}">
-    Id:
-    <input th:field="*{id}"/><br>
-    Name:
-    <input th:field="*{name}"/><br>
-    Gender
-    <input type="radio" th:field="*{gender}" value="1"/>Male
-    <input type="radio" th:field="*{gender}" value="0"/>Female<br>
-    Subjects
-    <input type="checkbox" th:field="*{subjects}" th:each="sub:${subjects}" th:value="${sub}" th:text="${sub}"/><br>
-    <select th:field="*{className}">
-        <option value="">---Chọn lớp------</option>
-        <option value="C02">C02</option>
-        <option value="C03">C03</option>
-        <option value="C04">C04</option>
-    </select><br>
-    <button>Lưu</button>
+<h2>Thêm sản phẩm</h2>
+
+<form th:action="@{/products/save}" th:object="${product}" method="post">
+    <p>Tên: <input type="text" th:field="*{name}"/></p>
+    <p>Giá: <input type="number" step="0.01" th:field="*{price}"/></p>
+    <p>Mô tả: <input type="text" th:field="*{description}"/></p>
+    <p>Nhà sản xuất: <input type="text" th:field="*{manufacturer}"/></p>
+    <button type="submit">💾 Lưu</button>
 </form>
+
+<a th:href="@{/products}">⬅ Quay lại</a>
 </body>
 </html>
