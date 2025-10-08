@@ -4,7 +4,6 @@ package com.example.Blog.service;
 import com.example.Blog.entity.Blog;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IBlogService {
     Blog save(Blog blog);

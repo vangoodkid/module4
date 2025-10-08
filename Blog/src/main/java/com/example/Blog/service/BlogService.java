@@ -2,13 +2,14 @@ package com.example.Blog.service;
 
 import com.example.Blog.entity.Blog;
 import com.example.Blog.repository.IBlogRepository;
+import com.example.Blog.service.IBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 @Service
-public class BlogService implements IBlogService{
+public class BlogService implements IBlogService {
     @Autowired
     private IBlogRepository blogRepository;
     @Override
