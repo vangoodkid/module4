@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Trả sách</title>
+</head>
+<body>
+<a th:href="@{'/books'}">&lt; Quay lại</a>
+<h2>Trả sách</h2>
+<form method="post" th:action="@{'/books/return'}">
+  <label>Mã mượn (5 chữ số): <input name="code" maxlength="5"/></label>
+  <button type="submit">Trả</button>
+</form>
+</body>
+</html>
