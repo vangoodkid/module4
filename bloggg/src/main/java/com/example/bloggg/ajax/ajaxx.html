@@ -2,178 +2,123 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Blog AJAX Demo</title>
     <script src="jquery-3.6.0.js"></script>
 </head>
 <body>
 <div>
-    <input id="title" placeholder="enter name"><br>
-    <input id="summary" placeholder="enter name"><br>
-    <input id="contents" placeholder="enter name"><br>
-    <button id="btn-save">Save</button>
+    <input id="title" placeholder="Nhập tiêu đề"><br>
+    <input id="summary" placeholder="Nhập tóm tắt"><br>
+    <input id="contents" placeholder="Nhập nội dung"><br>
+    <button id="btn-save">Lưu</button>
 </div>
 
-<h1>Danh sách</h1>
-<table border="1">
+<h1>Danh sách bài viết</h1>
+<table border="1" cellpadding="5" cellspacing="0">
     <thead>
     <tr>
         <th>STT</th>
-        <th>Title</th>
-        <th>Summary</th>
-        <th>Content</th>
+        <th>Tiêu đề</th>
+        <th>Tóm tắt</th>
+        <th>Nội dung</th>
     </tr>
     </thead>
-    <tbody id="content">
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    </tbody>
-
-
+    <tbody id="content"></tbody>
 </table>
-<button id="btn-more">Xem thêm</button>
-<h1>Footer</h1>
-<script>
 
-    // $(document).ready(function () {
-    //     // setTimeout(display,6000);
-    //     display();
-    //     $("#btn-add").click(function () {
-    //         let title = $("#content").val();
-    //         let summary =$("#summary").val();
-    //         let content = $("#content").val();
-    //         let blog = {
-    //             title :title,
-    //             summary: summary,
-    //             content:content
-    //         }
-    //
-    //         console.log(blog);
-    //
-    //         $.ajax({
-    //             url: `http://localhost:8080/v1/api/blogs`,
-    //             method: "post",
-    //             contentType: "application/json",
-    //             data: JSON.stringify(blog),
-    //             success: function (data) {
-    //                 console.log("Thành công");
-    //                 display();
-    //             },
-    //             complete: function (res){
-    //                 console.log("luôn cháy")
-    //             },
-    //             error: function (res){
-    //                 console.log(res);
-    //                 console.log(res.status);
-    //                 console.log(res.responseJSON);
-    //                 $("#errorName").text(res.responseJSON.name);
-    //             }
-    //         })
-    //     })
-    //
-    //     function add() {
-    //
-    //     }
-    //
-    //     function display() {
-    //         $.ajax({
-    //             url: `http://localhost:8080/v1/api/blogs`,
-    //             method: "get",
-    //             dataType: "json",
-    //             success: function (data) {
-    //                 console.log(data);
-    //                 let content = "";
-    //                 for (let i = 0; i < data.length; i++) {
-    //                     content += `    <tr>
-    //                                         <td>${i + 1}</td>
-    //                                         <td>${data[i].title}</td>
-    //                                         <td>${data[i].summary}</td>
-    //                                         <td>${data[i].content}</td>
-    //                                     </tr>`
-    //                 }
-    //                 $("#content").html(content);
-    //
-    //             }
-    //         })
-    //     }
-    //
-    // });
-    $(document).ready(function (){
-        let page =0;
+<button id="btn-more">Xem thêm</button>
+
+<h1>Footer</h1>
+
+<script>
+    $(document).ready(function () {
+        let page = 0;
+        let lastPage = false; // dùng để kiểm tra hết dữ liệu chưa
+
+        // --- Gọi khi tải trang ---
         display();
+
+        // --- Gắn sự kiện ---
         $('#btn-more').click(displayMore);
         $('#btn-save').click(save);
 
+        // === Hàm lưu bài viết ===
+        function save() {
+            const blog = {
+                title: $("#title").val(),
+                summary: $("#summary").val(),
+                content: $("#contents").val()
+            };
+            console.log("Dữ liệu gửi đi:", blog);
 
-        function save(){
-			let title = $("#title").val();
-			let summary =$("#summary").val();
-			let contentText = $("#contents").val();
-			const blog = {
-				title: title,
-				summary: summary,
-				content: contentText
-			}
-            console.log(blog)
             $.ajax({
-                url:`http://localhost:8080/v1/api/blogs`,
+                url: "http://localhost:8080/v1/api/blogs",
+                type: "POST",
                 dataType: "json",
                 contentType: "application/json",
-                type: "post",
                 data: JSON.stringify(blog),
-				success: function (){
-					console.log("thêm mới thành công")
-					page=0;
-					display();
-				},
-                error: function (res){
-                    console.log("-----------lỗi---------")
-                    console.log(res.status)
+                success: function () {
+                    console.log(" Thêm mới thành công!");
+                    page = 0;
+                    lastPage = false;
+                    display();
+                },
+                error: function (res) {
+                    console.log(" Lỗi khi thêm:", res.status);
                 }
             });
         }
-        function displayMore(){
-            page++;
-            display();
+
+        // === Hàm tải thêm ===
+        function displayMore() {
+            if (!lastPage) {
+                page++;
+                display();
+            }
         }
 
-		function display(){
+        // === Hàm hiển thị danh sách ===
+        function display() {
             $.ajax({
-                url:`http://localhost:8080/v1/api/blogs?page=${page}`,
+                url: `http://localhost:8080/v1/api/blogs?page=${page}`,
+                type: "GET",
                 dataType: "json",
-                type: "get",
-				success: function ( data, textStatus, res){
-                    console.log("------data------------");
-					let rows ="";
-					for (let i = 0; i < data.content.length; i++) {
-						const item = data.content[i];
-						rows += `    <tr>
-							<td>${(page * data.size) + i + 1}</td>
-							<td>${item.title ?? ''}</td>
-							<td>${item.summary ?? ''}</td>
-							<td>${item.content ?? ''}</td>
-						</tr>`
-					}
-					if(page === 0){
-						$("#content").html(rows)
-					}else{
-						$("#content").append(rows)
-					}
-                    console.log(data);
-                    console.log(textStatus)
-                    console.log(res.status)
+                success: function (data) {
+                    console.log(" Dữ liệu trả về:", data);
+
+                    let rows = "";
+                    for (let i = 0; i < data.content.length; i++) {
+                        const item = data.content[i];
+                        rows += `
+                            <tr>
+                                <td>${(page * data.size) + i + 1}</td>
+                                <td>${item.title ?? ''}</td>
+                                <td>${item.summary ?? ''}</td>
+                                <td>${item.content ?? ''}</td>
+                            </tr>`;
+                    }
+
+                    if (page === 0) {
+                        $("#content").html(rows);
+                    } else {
+                        $("#content").append(rows);
+                    }
+
+                    // Ẩn nút nếu hết trang
+                    if (data.last === true || data.content.length === 0) {
+                        lastPage = true;
+                        $("#btn-more").hide();
+                        console.log(" Hết dữ liệu, ẩn nút 'Xem thêm'");
+                    } else {
+                        $("#btn-more").show();
+                    }
                 },
-                error: function (res){
-                    console.log("-----------lỗi---------")
-                    console.log(res.status)
+                error: function (res) {
+                    console.log(" Lỗi khi load:", res.status);
                 }
             });
         }
     });
 </script>
-<h1>footer</h1>
 </body>
 </html>
