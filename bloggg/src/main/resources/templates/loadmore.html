@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Danh sách Blog - Tải thêm</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Danh sách bài viết</h2>
+<table border="1">
+  <thead>
+  <tr>
+    <th>STT</th>
+    <th>Tiêu đề</th>
+    <th>Tóm tắt</th>
+    <th>Nội dung</th>
+  </tr>
+  </thead>
+  <tbody id="blogTable"></tbody>
+</table>
+
+<button id="btnLoadMore">Tải thêm</button>
+
+<script>
+  $(function() {
+    let page = 0; // trang hiện tại
+    const size = 5; // số bài mỗi lần tải
+
+    function loadBlogs(reset = false) {
+      $.ajax({
+        url: `http://localhost:8080/v1/api/blogs?page=${page}&size=${size}`,
+        type: 'GET',
+        success: function(data) {
+          let html = '';
+          if (data.content.length === 0) {
+            $('#btnLoadMore').prop('disabled', true).text('Hết bài rồi 😄');
+            return;
+          }
+
+          for (let i = 0; i < data.content.length; i++) {
+            const b = data.content[i];
+            html += `<tr>
+                        <td>${(page * size) + i + 1}</td>
+                        <td>${b.title}</td>
+                        <td>${b.summary}</td>
+                        <td>${b.content}</td>
+                    </tr>`;
+          }
+
+          if (reset) $('#blogTable').html(html);
+          else $('#blogTable').append(html);
+        },
+        error: function() {
+          alert("Lỗi khi tải bài viết!");
+        }
+      });
+    }
+
+    // tải trang đầu tiên khi mở
+    loadBlogs(true);
+
+    // nút tải thêm
+    $('#btnLoadMore').click(function() {
+      page++;
+      loadBlogs();
+    });
+  });
+</script>
+
+</body>
+</html>

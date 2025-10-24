@@ -1,7 +1,7 @@
 package com.example.bloggg.Controller;
 
-import com.example.blogg.Entity.Category;
-import com.example.blogg.Service.ICategoryService;
+import com.example.bloggg.Entity.Category;
+import com.example.bloggg.Service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.example.bloggg.Service;
 
-import com.example.blogg.Entity.Blog;
-import com.example.blogg.Repository.IBlogRepository;
+import com.example.bloggg.Entity.Blog;
+import com.example.bloggg.Repository.IBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

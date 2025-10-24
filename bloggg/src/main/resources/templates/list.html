@@ -1,38 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Danh sách Blog</title>
+    <meta charset="UTF-8">
+    <title>Tìm kiếm Blog</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<h1>Danh sách Blog</h1>
-<p><a th:href="@{/blogs/news}">Viết bài mới</a></p>
-<form class="d-flex" action="/blogs" method="get">
-    <input th:value="${searchName}" class="form-control form-control-sm w-50" name="searchName" placeholder="Nhập tên">
-    <button class="btn btn-primary btn-sm">Tìm kiếm</button>
-</form>
-<div th:if="${success}"><p th:text="${success}"></p></div>
-<div th:if="${error}"><p th:text="${error}"></p></div>
-<table>
+
+<h2>Tìm kiếm bài viết</h2>
+<input type="text" id="keyword" placeholder="Nhập từ khóa...">
+<button id="btnSearch">Tìm</button>
+
+<h3>Kết quả:</h3>
+<table border="1">
     <thead>
-    <tr><th>Tiêu đề</th><th>Tóm tắt</th><th>Hành động</th></tr>
-    </thead>
-    <tbody>
-    <tr th:each="b : ${blogsPage.content}">
-        <td th:text="${b.title}">Title</td>
-        <td th:text="${b.summary}">Summary</td>
-        <td>
-            <a th:href="@{'/blogs/detail/' + ${b.id}}">Xem</a>
-            <a th:href="@{'/blogs/edit/' + ${b.id}}">Sửa</a>
-            <form th:action="@{'/blogs/delete/' + ${b.id}}" method="post" style="display:inline">
-                <button type="submit">Xoá</button>
-            </form>
-        </td>
+    <tr>
+        <th>STT</th>
+        <th>Tiêu đề</th>
+        <th>Tóm tắt</th>
+        <th>Nội dung</th>
     </tr>
-    </tbody>
+    </thead>
+    <tbody id="resultTable"></tbody>
 </table>
-<a th:if="${blogsPage.hasPrevious()}" th:href="@{/blogs(page=${blogsPage.number-1},searchName=${searchName})}">Trước</a>
-<span th:text="${blogsPage.number+1}"></span>/<span th:text="${blogsPage.totalPages}"></span>
-<a th:if="${blogsPage.hasNext()}" th:href="@{/blogs(page=${blogsPage.number+1},searchName=${searchName})}">Sau</a>
+
+<script>
+    $(function() {
+        $('#btnSearch').click(function() {
+            const keyword = $('#keyword').val().trim();
+            if (keyword === "") {
+                alert("Vui lòng nhập từ khóa!");
+                return;
+            }
+
+            $.ajax({
+                url: `http://localhost:8080/v1/api/blogs/search?keyword=${keyword}`,
+                type: 'GET',
+                success: function(data) {
+                    let html = '';
+                    if (data.length === 0) {
+                        html = `<tr><td colspan="4">Không có bài viết nào phù hợp</td></tr>`;
+                    } else {
+                        for (let i = 0; i < data.length; i++) {
+                            const b = data[i];
+                            html += `<tr>
+                            <td>${i + 1}</td>
+                            <td>${b.title}</td>
+                            <td>${b.summary}</td>
+                            <td>${b.content}</td>
+                        </tr>`;
+                        }
+                    }
+                    $('#resultTable').html(html);
+                },
+                error: function() {
+                    alert("Có lỗi xảy ra khi tìm kiếm!");
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>

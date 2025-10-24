@@ -1,7 +1,7 @@
 package com.example.bloggg.Service;
 
 
-import com.example.blogg.Entity.Category;
+import com.example.bloggg.Entity.Category;
 
 import java.util.List;
 

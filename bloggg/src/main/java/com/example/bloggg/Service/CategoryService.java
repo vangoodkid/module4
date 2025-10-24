@@ -1,7 +1,7 @@
 package com.example.bloggg.Service;
 
-import com.example.blogg.Entity.Category;
-import com.example.blogg.Repository.ICategoryRepository;
+import com.example.bloggg.Entity.Category;
+import com.example.bloggg.Repository.ICategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
